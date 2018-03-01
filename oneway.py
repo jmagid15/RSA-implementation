@@ -27,7 +27,6 @@ def exp_mod(a,x,N):
 def is_prime(n):
     # Using Miller-Rabin algorithm
     # Input n: odd integer to be tested for primality
-    # Input k: parameter to determine accuracy of test
     # Output: either False for 'composite' or True for 'probably prime'
 
     if n == 2:
@@ -115,19 +114,19 @@ def rand_nbit_safe_prime_generator(n):
 
 class exponentiation_OWP:
 
-    def gen(n):
+    def gen(self, n):
         # Input n: number of bits
         # Output p, g
         p, g = rand_nbit_safe_prime_generator(n)
         return p, g
 
-    def sample(p):
+    def sample(self, p):
         # Input p from gen()
         # Output x
         x = random.randint(1, p-1)
         return x
 
-    def evaluate(p, g, x):
+    def evaluate(self, p, g, x):
         # Input p,g,x
         # Output fx
         return exp_mod(g, x, p)
@@ -166,37 +165,39 @@ def trapdoor(fx, d, N):
     x = exp_mod(fx, d, N)
     return x
 
-#### Print Section ####
-# print(extendedeuclid(4, 15))
-# inv_mod(3,7)
-# exp_mod(3,3,5)
-# is_prime(309851)
-# rand_nbit_prime(20)
-# rand_nbit_safe_prime(10)
-# rand_nbit_safe_prime_generator(8)
+if __name__ == '__main__':
+
+    #### Print Section ####
+    # print(extendedeuclid(4, 15))
+    # print(inv_mod(3,7))
+    # print(exp_mod(3,3,5))
+    # print(is_prime(309851))
+    # print(rand_nbit_prime(20))
+    # print(rand_nbit_safe_prime(10))
+    # print(rand_nbit_safe_prime_generator(8))
 
 
-#### RSA and trapdoor ####
-print('-'*50)
-print('Generating x, f(x), x_ret using RSA implementation and trapdoor...')
+    #### RSA and trapdoor ####
+    print('-'*50)
+    print('Generating x, f(x), x_ret using RSA implementation and trapdoor...')
 
-# Set n bits (aka how long of a safe prime do you want)
-cls_inst = RSA_OWP()
-N, e, d = cls_inst.gen(2048)
-x = cls_inst.sample(N)
-fx = cls_inst.evaluate(x, e, N)
-print('x: ', x, '\n')
-print('fx: ', fx, '\n')
+    # Set n bits (aka how long of a safe prime do you want)
+    cls_inst = RSA_OWP()
+    N, e, d = cls_inst.gen(2048)
+    x = cls_inst.sample(N)
+    fx = cls_inst.evaluate(x, e, N)
+    print('x: ', x, '\n')
+    print('fx: ', fx, '\n')
 
-x_ret = trapdoor(fx, d, N)
-print('x_ret: ', x_ret, '\n')
-print('Does x = x_ret? ' x == x_ret)
+    x_ret = trapdoor(fx, d, N)
+    print('x_ret: ', x_ret, '\n')
+    print('Does x = x_ret? ', x == x_ret)
 
 
-#### Safe prime as big as possible ####
-print('-'*50)
-n_in = 512
-print('Finding a safe prime of at least', n_in, 'bits...')
-p, q = rand_nbit_safe_prime(n_in)
-print('p: ', p, '\n')
-print('q: ', q)
+    #### Safe prime as big as possible ####
+    print('-'*50)
+    n_in = 512
+    print('Finding a safe prime of at least', n_in, 'bits...')
+    p, q = rand_nbit_safe_prime(n_in)
+    print('p: ', p, '\n')
+    print('q: ', q)
